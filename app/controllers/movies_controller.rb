@@ -11,7 +11,17 @@ class MoviesController < ApplicationController
   end
 
   def index
+#   if they clicked the link in the header.... display using ordered output
+#     do ordered display
+#   else display in the regular way
     @movies = Movie.all
+    session[:sorted_movies_flag] = false
+
+    if params[:sort_movies_param] == "true"
+        @movies = Movie.all.order(title: :asc)
+        session[:sorted_movies_flag] = true
+    end
+
   end
 
   def new
