@@ -15,11 +15,14 @@ class MoviesController < ApplicationController
 #     do ordered display
 #   else display in the regular way
     @movies = Movie.all
-    session[:sorted_movies_flag] = false
+    session[:sorted_column] = nil
 
-    if params[:sort_movies_param] == "true"
+    if params[:sorted_column_param] == "movies"
         @movies = Movie.all.order(title: :asc)
-        session[:sorted_movies_flag] = true
+        session[:sorted_column] = "movies"
+    elsif params[:sorted_column_param] == "release_date"
+        @movies = Movie.all.order(release_date: :asc)
+        session[:sorted_column] = "release_date"
     end
 
   end
