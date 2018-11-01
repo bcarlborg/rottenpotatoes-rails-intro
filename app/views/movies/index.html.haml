@@ -4,8 +4,7 @@
   %thead
     %tr
       - if session[:sorted_movies_flag] == true
-        
-        %th= link_to "Movie Title", movies_path()
+        %th.hilite= link_to "Movie Title", movies_path()
       - else
         %th= link_to "Movie Title", movies_path({:sort_movies_param => true})
       %th Rating
