@@ -11,10 +11,15 @@ class MoviesController < ApplicationController
   end
 
   def index
-#   if they clicked the link in the header.... display using ordered output
-#     do ordered display
-#   else display in the regular way
-    @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+    @ratings_params = [] 
+    if params[:ratings]
+        @movies = Movie.where({rating: params[:ratings].keys}) 
+        @ratings_params = params[:ratings].keys
+    else
+        @movies = Movie.all
+    end
+    
     session[:sorted_column] = nil
 
     if params[:sorted_column_param] == "movies"
