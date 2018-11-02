@@ -21,7 +21,7 @@ class MoviesController < ApplicationController
     end
 
     if not session.has_key?(:sorted_column) or session[:sorted_column].nil?
-        session[:sorted_colum] = "no_sort"
+        session[:sorted_column] = "no_sort"
     end
 
 
@@ -35,7 +35,7 @@ class MoviesController < ApplicationController
  
  
     if params.has_key?(:ratings) and not params.has_key?(:sorted_column)
-        redirect_to movies_path({:ratings => params[:ratings], :sorted_column =>session[:sorted_colum]}) 
+        redirect_to movies_path({:ratings => params[:ratings], :sorted_column =>session[:sorted_column]}) 
         return
 
     elsif not params.has_key?(:ratings) and params.has_key?(:sorted_column)
@@ -44,6 +44,11 @@ class MoviesController < ApplicationController
         redirect_to movies_path({:ratings => ratings_hash, :sorted_column => session[:sorted_column]})
         return
 
+    elsif not params.has_key?(:rating) and not params.has_key?(:sorted_column)
+        ratings_hash = {}
+        session[:ratings].each {|rating| ratings_hash[rating] = "1"} 
+        redirect_to movies_path({:ratings => ratings_hash, :sorted_column => session[:sorted_column]})
+        return
     end
     
      
