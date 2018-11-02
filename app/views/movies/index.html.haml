@@ -5,23 +5,23 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag("ratings[#{rating}]", "1", @ratings_params.include?(rating), :id => "ratings_#{rating}")
+    = check_box_tag("ratings[#{rating}]", "1", session[:ratings].include?(rating), :id => "ratings_#{rating}")
   = submit_tag('Refresh', :id => 'ratings_submit')
 
 %table#movies
   %thead
     %tr
       - if session[:sorted_column] == "movies"
-        %th.hilite= link_to "Movie Title", movies_path()
+        %th.hilite= link_to "Movie Title", movies_path({:sorted_column => "no_sort"})
       - else
-        %th= link_to "Movie Title", movies_path({:sorted_column_param => "movies"})
+        %th= link_to "Movie Title", movies_path({:sorted_column => "movies"})
       
       %th Ratings 
       
       - if session[:sorted_column] == "release_date"
-        %th.hilite= link_to "Release Date", movies_path()
+        %th.hilite= link_to "Release Date", movies_path({:sorted_column => "no_sort"})
       - else
-        %th= link_to "Release Date", movies_path({:sorted_column_param => "release_date"})
+        %th= link_to "Release Date", movies_path({:sorted_column => "release_date"})
       %th More Info
   %tbody
     - @movies.each do |movie|

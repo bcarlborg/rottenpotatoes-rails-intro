@@ -13,21 +13,49 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
     @ratings_params = [] 
+
+    @movies = Movie.all
+
+    if not session[:ratings]
+        session[:ratings] = @all_ratings
+    end
+
+    if not session.has_key?(:sorted_column) or session[:sorted_column].nil?
+        session[:sorted_colum] = "no_sort"
+    end
+
+
     if params[:ratings]
-        @movies = Movie.where({rating: params[:ratings].keys}) 
-        @ratings_params = params[:ratings].keys
-    else
-        @movies = Movie.all
+        session[:ratings] = params[:ratings].keys  
+    end
+
+    if params[:sorted_column]
+        session[:sorted_column] = params[:sorted_column]
+    end 
+ 
+ 
+    if params.has_key?(:ratings) and not params.has_key?(:sorted_column)
+        redirect_to movies_path({:ratings => params[:ratings], :sorted_column =>session[:sorted_colum]}) 
+        return
+
+    elsif not params.has_key?(:ratings) and params.has_key?(:sorted_column)
+        ratings_hash = {}
+        session[:ratings].each {|rating| ratings_hash[rating] = "1"} 
+        redirect_to movies_path({:ratings => ratings_hash, :sorted_column => session[:sorted_column]})
+        return
+
     end
     
-    session[:sorted_column] = nil
+     
+    if session[:sorted_column] == "movies"
+        @movies = Movie.where({rating: session[:ratings]}).order(title: :asc)
 
-    if params[:sorted_column_param] == "movies"
-        @movies = Movie.all.order(title: :asc)
-        session[:sorted_column] = "movies"
-    elsif params[:sorted_column_param] == "release_date"
-        @movies = Movie.all.order(release_date: :asc)
-        session[:sorted_column] = "release_date"
+    elsif session[:sorted_column] == "release_date"
+        @movies = Movie.where({rating: session[:ratings]}).order(release_date: :asc)
+
+    elsif session[:sorted_column] == "no_sort"
+        @movies = Movie.where({rating: session[:ratings]})
+
     end
 
   end
