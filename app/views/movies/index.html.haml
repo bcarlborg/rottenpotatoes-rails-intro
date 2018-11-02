@@ -20,9 +20,9 @@
       %th Ratings 
       
       - if session[:sorted_column] == "release_date"
-        %th.hilite= link_to "Release Date", movies_path({:sorted_column => "no_sort"}), :id => "title_header"
+        %th.hilite= link_to "Release Date", movies_path({:sorted_column => "no_sort"}), :id => "release_date_header"
       - else
-        %th= link_to "Release Date", movies_path({:sorted_column => "release_date"}), :id => "title_header"
+        %th= link_to "Release Date", movies_path({:sorted_column => "release_date"}), :id => "release_date_header"
       %th More Info
   %tbody
     - @movies.each do |movie|
